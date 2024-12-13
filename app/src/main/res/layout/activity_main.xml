@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <!-- Logo dan Nama Aplikasi -->
+    <LinearLayout
+        android:id="@+id/logo_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="32dp">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/logo_bg_putih" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NUTRIMAMA DAILY"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+
+    <!-- Sapaan -->
+    <TextView
+        android:id="@+id/sapaan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo_container"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:text="Hello, Selamat Datang!"
+        android:textSize="18sp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/masuk_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sapaan"
+        android:layout_marginStart="16dp"
+        android:text="Masuk"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="8dp" />
+
+    <!-- Field Email -->
+    <EditText
+        android:id="@+id/email_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/masuk_text"
+        android:layout_marginTop="16dp"
+        android:hint="Email"
+        android:background="@drawable/border"
+        android:padding="16dp"
+        android:inputType="textEmailAddress"
+        android:textSize="16sp"/>
+
+    <!-- Field Password -->
+    <EditText
+        android:id="@+id/password_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_input"
+        android:layout_marginTop="16dp"
+        android:hint="Password"
+        android:background="@drawable/border"
+        android:padding="16dp"
+        android:inputType="textPassword"
+        android:textSize="16sp" />
+
+    <!-- Tombol Lupa Password -->
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password_input"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text=""
+        android:textColor="#FF122E"
+        android:textSize="14sp" />
+
+    <!-- Tombol Login -->
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forgot_password"
+        android:layout_marginTop="16dp"
+        android:text="Masuk"
+        android:backgroundTint="#FF122E"
+        android:textColor="@android:color/white"
+        android:padding="16dp"
+        android:textSize="18sp" />
+
+    <!-- Teks Daftar -->
+    <TextView
+        android:id="@+id/register_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Belum punya akun? Daftar"
+        android:textColor="#FF122E"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp" />
+</RelativeLayout>

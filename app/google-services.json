@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "998058036663",
+    "firebase_url": "https://nutrimamadaily-eb173-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nutrimamadaily-eb173",
+    "storage_bucket": "nutrimamadaily-eb173.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998058036663:android:f6251a4961474776022c32",
+        "android_client_info": {
+          "package_name": "com.example.nutrimamadaily"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcOsxQscWwVL_3qrtr1fiLcdW9LXeByYQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

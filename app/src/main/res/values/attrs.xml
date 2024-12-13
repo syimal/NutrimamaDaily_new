@@ -1,0 +1,19 @@
+<resources>
+    <!-- Declare the style for CircularProgressBar -->
+    <style name="CircularProgressBarStyle">
+        <item name="circleColor">?android:attr/colorAccent</item> <!-- Default color for circle -->
+        <item name="progressColor">#FF122E</item> <!-- Default progress color -->
+        <item name="textColor">#000000</item> <!-- Default text color -->
+        <item name="strokeWidth">20dp</item> <!-- Default stroke width -->
+        <item name="max">100</item> <!-- Default max progress value, no dp here -->
+    </style>
+
+    <!-- Declare styleable for custom attributes -->
+    <declare-styleable name="CircularProgressBar">
+        <attr name="circleColor" format="color"/>
+        <attr name="progressColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="max" format="integer"/>
+    </declare-styleable>
+</resources>
