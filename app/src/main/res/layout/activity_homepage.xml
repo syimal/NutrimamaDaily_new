@@ -1,118 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
 
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp">
 
-        <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/profile_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/person"
+            android:contentDescription="Profile Icon"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle_background"/>
+
+        <TextView
+            android:id="@+id/sapaan"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingBottom="8dp">
+            android:fontFamily="sans-serif-medium"
+            android:text="Hi, Moms!"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/profile_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/person"
-                android:contentDescription="Profile Icon"
-                android:layout_marginEnd="8dp" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
+        android:progress="0"
+        android:indeterminate="false"
+        android:max="100"
+        android:progressDrawable="@drawable/progress_bar_style"
+        style="@android:style/Widget.ProgressBar.Horizontal"/>
 
-            <TextView
-                android:id="@+id/sapaan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Hi, Moms!"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-        </LinearLayout>
+    <TextView
+        android:id="@+id/progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="0%"
+        android:textColor="#FF122E"
+        android:textSize="12sp"/>
 
-        <!-- Image Carousel (ViewPager2) -->
+    <!-- Image Carousel -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:radius="12dp"
+        android:elevation="4dp">
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/image_carousel"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Carousel Indicators -->
-        <LinearLayout
-            android:id="@+id/indicator_views"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="8dp">
-            <!-- Initial indicator views will be dynamically added in Kotlin -->
-        </LinearLayout>
+    <!-- Carousel Indicators -->
+    <LinearLayout
+        android:id="@+id/indicator_views"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+    </LinearLayout>
 
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingVertical="8dp">
-
-            <Button
-                android:id="@+id/btn_tips"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#FF122E"
-                android:text="Tips"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btn_riwayat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#FF122E"
-                android:text="Riwayat"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
+    <!-- Buttons Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingVertical="16dp">
 
         <Button
-            android:id="@+id/btn_fye"
-            android:layout_width="match_parent"
+            android:id="@+id/btn_tips"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:backgroundTint="#FF122E"
-            android:text="For Your Education"
+            android:text="Tips"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginVertical="8dp" />
+            android:textSize="16sp"
+            android:layout_marginEnd="8dp"/>
 
-        <!-- Bottom Face Icon -->
+        <Button
+            android:id="@+id/btn_riwayat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FF122E"
+            android:text="Riwayat"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_fye"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF122E"
+        android:text="For Your Education"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"/>
+
+    <!-- Central Icon -->
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        android:layout_marginTop="190dp">
+
         <ImageView
             android:id="@+id/utama"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center"
             android:src="@drawable/cutlery"
-            android:contentDescription="Face Icon"
-            android:layout_marginTop="250dp" />
+            android:contentDescription="Face Icon" />
+    </FrameLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Diary"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textColor="#FF122E"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
-</ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Diary"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textColor="#FF122E"
+        android:textStyle="bold"/>
+
+</LinearLayout>
