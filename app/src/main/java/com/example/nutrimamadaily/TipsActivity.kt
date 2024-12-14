@@ -1,8 +1,10 @@
 package com.example.nutrimamadaily
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.helper.widget.Carousel.Adapter
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,8 @@ class TipsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataList: ArrayList<DataClass2>
     private lateinit var searchList: ArrayList<DataClass2>
+    lateinit var descList: Array<String>
+    private lateinit var myAdapter: AdapterClass2
     private lateinit var adapter: AdapterClass2
     private lateinit var searchView: SearchView
 
@@ -21,25 +25,12 @@ class TipsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tips)
 
-        // Adjust padding for system bars (optional)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Initialize RecyclerView and SearchView
-        recyclerView = findViewById(R.id.recyclerView)
-        searchView = findViewById(R.id.search)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
-
-        // Initialize data lists
-        dataList = ArrayList()
-        searchList = ArrayList()
-
-        // List data for images and titles
         val imageList = arrayListOf(
             R.drawable.go, R.drawable.happy, R.drawable.tea, R.drawable.fetus,
             R.drawable.heartburn, R.drawable.tamarind, R.drawable.nutrition, R.drawable.anemia,
@@ -55,17 +46,39 @@ class TipsActivity : AppCompatActivity() {
             "Tips Sehat Makan Buah selama Hamil"
         )
 
-        // Mengisi data untuk DataClass2
+        descList = arrayOf(
+            getString(R.string.go),
+            getString(R.string.happy),
+            getString(R.string.tea),
+            getString(R.string.fetus),
+            getString(R.string.heartburn),
+            getString(R.string.tamarind),
+            getString(R.string.nutrition),
+            getString(R.string.anemia),
+            getString(R.string.bicycle),
+            getString(R.string.sashimi),
+            getString(R.string.pointer),
+            getString(R.string.cough),
+            getString(R.string.fruit)
+        )
+
+        recyclerView = findViewById(R.id.recyclerView)
+        searchView = findViewById(R.id.search)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+        dataList = ArrayList()
+        searchList = ArrayList()
+
         for (i in imageList.indices) {
-            dataList.add(DataClass2(imageList[i], titleList[i]))
+            dataList.add(DataClass2(imageList[i], titleList[i], descList[i]))
         }
         searchList.addAll(dataList)
 
-        // Inisialisasi AdapterClass2 dengan searchList
         adapter = AdapterClass2(searchList)
         recyclerView.adapter = adapter
 
-        // Search functionality
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
@@ -86,10 +99,18 @@ class TipsActivity : AppCompatActivity() {
                     searchList.addAll(dataList)
                 }
 
-                // Update adapter
                 adapter.notifyDataSetChanged()
                 return false
             }
         })
+
+        myAdapter=AdapterClass2(searchList)
+        recyclerView.adapter = myAdapter
+
+        myAdapter.onItemClick ={
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("android", it)
+            startActivity(intent)
+        }
     }
 }

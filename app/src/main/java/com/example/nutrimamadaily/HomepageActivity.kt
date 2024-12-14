@@ -8,15 +8,31 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 
 class HomepageActivity : AppCompatActivity() {
 
+    // Deklarasi variabel tambahan
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressTextView: TextView
+
+    // Total tahapan atau misi yang akan dilacak
+    private val TOTAL_STAGES = 5
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
+
+        // Inisialisasi Progress Bar
+        progressBar = findViewById(R.id.progress_bar)
+        progressTextView = findViewById(R.id.progress_text)
+
+        // Setup Progress Bar
+        setupProgressBar()
 
         val carouselImages = listOf(
             R.drawable.ibu_susu,
@@ -46,6 +62,9 @@ class HomepageActivity : AppCompatActivity() {
             // Start FyeActivity when the button is clicked
             val intent = Intent(this, FyeActivity::class.java)
             startActivity(intent)
+
+            // Update progress untuk milestone "Edukasi"
+            updateProgressForMilestone("Edukasi")
         }
 
         // Set the OnClickListener for the "Tips" button
@@ -54,6 +73,9 @@ class HomepageActivity : AppCompatActivity() {
             // Start TipsActivity when the button is clicked
             val intent = Intent(this, TipsActivity::class.java)
             startActivity(intent)
+
+            // Update progress untuk milestone "Tips"
+            updateProgressForMilestone("Tips")
         }
 
         // Set the OnClickListener for the "Riwayat" button
@@ -62,6 +84,9 @@ class HomepageActivity : AppCompatActivity() {
             // Start RiwayatActivity when the button is clicked
             val intent = Intent(this, RiwayatActivity::class.java)
             startActivity(intent)
+
+            // Update progress untuk milestone "Riwayat"
+            updateProgressForMilestone("Riwayat")
         }
 
         // Set the OnClickListener for the Diary image
@@ -70,9 +95,71 @@ class HomepageActivity : AppCompatActivity() {
             // When clicked, open UtamaActivity
             val intent = Intent(this, UtamaActivity::class.java)
             startActivity(intent)
+
+            // Update progress untuk milestone "Diary"
+            updateProgressForMilestone("Diary")
         }
     }
 
+    // Metode untuk setup progress bar
+    private fun setupProgressBar() {
+        // Atur maksimum progress bar
+        progressBar.max = 100
+
+        // Inisialisasi progress awal (bisa diambil dari penyimpanan atau default 0)
+        updateProgress(getInitialProgress())
+    }
+
+    // Metode untuk mendapatkan progress awal
+    private fun getInitialProgress(): Int {
+        // Implementasi untuk mendapatkan progress dari penyimpanan
+        // Misalnya dari SharedPreferences atau Database
+        // Sementara ini dikembalikan 0
+        return 0
+    }
+
+    // Metode untuk memperbarui progress
+    private fun updateProgress(completedStages: Int) {
+        // Hitung persentase progress
+        val progressPercentage = kotlin.math.min(
+            (completedStages.toFloat() / TOTAL_STAGES * 100).toInt(),
+            100
+        )
+
+        // Update progress bar
+        progressBar.progress = progressPercentage
+
+        // Update teks progress
+        progressTextView.text = "$progressPercentage%"
+
+        // Simpan progress (opsional)
+        saveProgress(completedStages)
+    }
+
+    // Variabel untuk melacak milestone yang sudah diselesaikan
+    private val completedMilestones = mutableSetOf<String>()
+
+    // Metode untuk update progress berdasarkan milestone
+    private fun updateProgressForMilestone(milestone: String) {
+        // Tambahkan milestone ke set yang sudah diselesaikan
+        completedMilestones.add(milestone)
+
+        // Update progress berdasarkan jumlah milestone yang diselesaikan
+        updateProgress(completedMilestones.size)
+    }
+
+    // Metode untuk menyimpan progress
+    private fun saveProgress(progress: Int) {
+        // Implementasi untuk menyimpan progress
+        // Misalnya menggunakan SharedPreferences
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putInt("APP_PROGRESS", progress)
+            apply()
+        }
+    }
+
+    // Metode dari implementasi sebelumnya
     private fun setupIndicators(indicators: LinearLayout, count: Int) {
         indicators.removeAllViews()
         for (i in 0 until count) {
@@ -94,7 +181,7 @@ class HomepageActivity : AppCompatActivity() {
         }
     }
 
-    // Adapter for Carousel
+    // Inner class Adapter untuk Carousel (tetap sama seperti sebelumnya)
     inner class ImageCarouselAdapter(private val images: List<Int>) :
         RecyclerView.Adapter<ImageCarouselAdapter.ViewHolder>() {
 
