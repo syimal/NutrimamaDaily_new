@@ -1,72 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- ImageView untuk Gambar Ibu Hamil -->
+    <ImageView
+        android:id="@+id/imagepage1"
+        android:layout_width="match_parent"
+        android:layout_height="324dp"
+        android:src="@drawable/ic_mamahamil"
+        android:scaleType="fitXY"
+        android:contentDescription="Gambar ibu hamil" />
+
+    <!-- LinearLayout untuk TextView -->
     <LinearLayout
-        android:id="@+id/chooseeatunhealthy"
+        android:id="@+id/linearlayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_below="@id/imagepage1"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="382dp"
-            android:layout_height="324dp"
-            android:src="@drawable/ic_ibuhamil"
-            android:scaleType="fitXY"/>
-
-        <LinearLayout
-            android:id="@+id/linearlayout2"
-            android:layout_width="386dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tvpagedua"
-                android:layout_width="362dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="Ayo pilih makanan tidak sehatmu!"
-                android:textAlignment="center"
-                android:textColor="#FF122E"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Daftar CheckBox untuk makanan tidak sehat -->
-        <CheckBox android:id="@+id/cbunhealthy1" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Seblak" />
-        <CheckBox android:id="@+id/cbunhealthy2" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mie Instan" />
-        <CheckBox android:id="@+id/cbunhealthy3" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Kentang Goreng" />
-        <CheckBox android:id="@+id/cbunhealthy4" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Burger" />
-        <CheckBox android:id="@+id/cbunhealthy5" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Pizza" />
-        <CheckBox android:id="@+id/cbunhealthy6" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Hotdog" />
-        <CheckBox android:id="@+id/cbunhealthy7" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Nugget Ayam" />
-        <CheckBox android:id="@+id/cbunhealthy8" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cake" />
-        <CheckBox android:id="@+id/cbunhealthy9" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Donat" />
-        <CheckBox android:id="@+id/cbunhealthy10" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Pop Corn" />
-        <CheckBox android:id="@+id/cbunhealthy11" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ikan Sarden" />
-        <CheckBox android:id="@+id/cbunhealthy12" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Es Krim" />
-        <CheckBox android:id="@+id/cbunhealthy13" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cireng" />
-        <CheckBox android:id="@+id/cbunhealthy14" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Gorengan" />
-        <CheckBox android:id="@+id/cbunhealthy15" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Jeroan" />
-        <CheckBox android:id="@+id/cbunhealthy16" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cokelat" />
-        <CheckBox android:id="@+id/cbunhealthy17" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Bakso Bakar" />
-        <CheckBox android:id="@+id/cbunhealthy18" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mie Ayam" />
-        <CheckBox android:id="@+id/cbunhealthy19" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Bakso" />
-        <CheckBox android:id="@+id/cbunhealthy20" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Basreng" />
-
-        <!-- Tombol OK -->
-        <Button
-            android:id="@+id/BtnOke2"
-            android:layout_width="149dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal"
-            android:text="Oke"
-            android:backgroundTint="#FF122E" />
-
+        <TextView
+            android:id="@+id/tvpagesatu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Ayo pilih makanan tidak sehatmu!"
+            android:textAlignment="center"
+            android:textColor="#FF122E"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
-</ScrollView>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewUnhealthy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlayout1"
+        android:layout_margin="16dp" />
+
+    <!-- Tombol OK -->
+    <Button
+        android:id="@+id/btnOke2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:text="Oke"
+        android:backgroundTint="#FF122E" />
+
+</RelativeLayout>
