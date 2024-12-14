@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,26 +10,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Mengganti ImageButton menjadi ImageView -->
         <ImageView
             android:id="@+id/imagepage1"
-            android:layout_width="382dp"
+            android:layout_width="0dp"
             android:layout_height="324dp"
-            android:src="@drawable/ic_ibuhamil"
-            android:scaleType="fitXY"/>
+            android:src="@drawable/ic_mamahamil"
+            android:scaleType="fitXY"
+            android:contentDescription="Gambar ibu hamil"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearlayout1"
-            android:layout_width="386dp"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvpagesatu"
-                android:layout_width="362dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:text="Ayo pilih makanan sehatmu!"
                 android:textAlignment="center"
@@ -36,204 +44,27 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <!-- Daftar CheckBox -->
-        <CheckBox
-            android:id="@+id/cbHealthy1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nasi" />
-
-        <CheckBox
-            android:id="@+id/cbHealthy2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salad Sayur" />
-
-        <CheckBox
-            android:id="@+id/cbHealthy3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Salad Buah" />
-
-        <CheckBox
-            android:id="@+id/cbHealthy4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sayur Sop" />
-
-        <CheckBox
-            android:id="@+id/cbHealthy5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Soto Ayam" />
-
-        <CheckBox
-            android:id="@+id/cbHealthy6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bubur"/>
-
-        <CheckBox
-            android:id="@+id/cbHealthy7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rawon"/>
-        <CheckBox
-            android:id="@+id/cbHealthy8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ikan Bakar"/>
-        <CheckBox
-            android:id="@+id/cbHealthy9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ikan Goreng"/>
-        <CheckBox
-            android:id="@+id/cbHealthy10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nasi Goreng"/>
-        <CheckBox
-            android:id="@+id/cbHealthy11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pecel"/>
-        <CheckBox
-            android:id="@+id/cbHealthy12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gado-Gado"/>
-        <CheckBox
-            android:id="@+id/cbHealthy13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pepes Ikan"/>
-        <CheckBox
-            android:id="@+id/cbHealthy14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sayur Bening Bayam"/>
-        <CheckBox
-            android:id="@+id/cbHealthy15"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tempe Goreng"/>
-        <CheckBox
-            android:id="@+id/cbHealthy16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tahu Goreng"/>
-        <CheckBox
-            android:id="@+id/cbHealthy17"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bubur Kacang Ijo"/>
-        <CheckBox
-            android:id="@+id/cbHealthy18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tumis Bayam"/>
-        <CheckBox
-            android:id="@+id/cbHealthy19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rujak Buah"/>
-        <CheckBox
-            android:id="@+id/cbHealthy20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bubur Sum-Sum"/>
-        <CheckBox
-            android:id="@+id/cbHealthy21"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bubur Ketan Hitam"/>
-        <CheckBox
-            android:id="@+id/cbHealthy22"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sop daging"/>
-        <CheckBox
-            android:id="@+id/cbHealthy23"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Udang Saus Padang"/>
-        <CheckBox
-            android:id="@+id/cbHealthy24"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Udang Saus Padang"/>
-        <CheckBox
-            android:id="@+id/cbHealthy25"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kepiting Saus Padang"/>
-        <CheckBox
-            android:id="@+id/cbHealthy26"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cumi Asam Manis"/>
-        <CheckBox
-            android:id="@+id/cbHealthy27"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cumi Saus Tiram"/>
-        <CheckBox
-            android:id="@+id/cbHealthy28"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cumi Saus Padang"/>
-        <CheckBox
-            android:id="@+id/cbHealthy29"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ayam Bakar"/>
-        <CheckBox
-            android:id="@+id/cbHealthy30"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tumis Kangkung"/>
-        <CheckBox
-            android:id="@+id/cbHealthy31"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ayam Goreng"/>
-        <CheckBox
-            android:id="@+id/cbHealthy32"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rendang"/>
-        <CheckBox
-            android:id="@+id/cbHealthy33"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Opor Ayam"/>
-        <CheckBox
-            android:id="@+id/cbHealthy34"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dendeng Sapi"/>
-        <CheckBox
-            android:id="@+id/cbHealthy35"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ayam Rica-Rica"/>
-        <CheckBox
-            android:id="@+id/cbHealthy36"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pudding Buah"/>
-
-        <Button
-            android:id="@+id/BtnOke1"
-            android:layout_width="149dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal"
-            android:text="Oke"
-            android:backgroundTint="#FF122E"/>
-
     </LinearLayout>
 
-</ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHealthyFood"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/chooseeathealthy"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Oke"
+        android:backgroundTint="#FF122E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

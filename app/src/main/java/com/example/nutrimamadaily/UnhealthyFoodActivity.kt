@@ -25,7 +25,8 @@ class UnhealthyFoodActivity : AppCompatActivity() {
             checkBox?.let { checkBoxes.add(it) }
         }
 
-        val btnOke2 = findViewById<Button>(R.id.BtnOke2)
+        val btnOke2 = findViewById<Button>(R.id.btnOke2)
+
 
         // Ketika tombol "Next" ditekan
         btnOke2.setOnClickListener {
