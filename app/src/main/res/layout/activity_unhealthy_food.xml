@@ -8,9 +8,8 @@
     <ImageView
         android:id="@+id/imagepage1"
         android:layout_width="match_parent"
-        android:layout_height="324dp"
-        android:src="@drawable/ic_mamahamil"
-        android:scaleType="fitXY"
+        android:layout_height="370dp"
+        android:src="@drawable/mama_makan"
         android:contentDescription="Gambar ibu hamil" />
 
     <!-- LinearLayout untuk TextView -->

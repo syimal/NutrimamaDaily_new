@@ -3,54 +3,69 @@ package com.example.nutrimamadaily
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.*
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class JumlahMakananActivity : AppCompatActivity() {
+
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var porsiAdapter: PorsiAdapter
+    private var selectedPorsi: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jumlah_makanan)
 
-        // Referensi elemen UI
-        val rgJumlahPorsi = findViewById<RadioGroup>(R.id.rgJumlahPorsi)
-        val btnSubmit = findViewById<Button>(R.id.BtnSubmit)
+        recyclerView = findViewById(R.id.recyclerViewPorsi)
+        val btnSubmit = findViewById<Button>(R.id.btnSubmit)
 
-        // Dapatkan progres sebelumnya dari Intent (baik unhealthy dan healthy)
         val healthyProgress = intent.getIntExtra("progress_healthy", 0)
+        val selectedHealthyItems = intent.getStringExtra("selected_healthy_items") ?: ""
+
         val unhealthyProgress = intent.getIntExtra("progress_unhealthy", 0)
-        Log.d("JumlahMakananActivity", "Healthy Progress: $healthyProgress") // Debugging
-        Log.d("JumlahMakananActivity", "Unhealthy Progress: $unhealthyProgress") // Debugging
+        val selectedUnealthyItems = intent.getStringExtra("selected_unhealthy_items") ?: ""
 
-        // Gabungkan poin healthy dan unhealthy
-        val totalProgress = healthyProgress + unhealthyProgress
-        Log.d("JumlahMakananActivity", "Total Progress: $totalProgress") // Debugging
+        Log.d("Selected Unhealthy", selectedUnealthyItems)
+        Log.d("Unhealty Progress", unhealthyProgress.toString())
+        db.collection("jumlahPorsi")
+            .get()
+            .addOnSuccessListener { documents ->
+                val porsiList = documents.mapNotNull { it.getString("Porsi") }
+                setupRecyclerView(porsiList)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JumlahMakananActivity", "Error fetching data", exception)
+                Toast.makeText(this, "Gagal memuat data dari database!", Toast.LENGTH_SHORT).show()
+            }
 
-        // Set listener untuk tombol submit
         btnSubmit.setOnClickListener {
-            // Cek apakah pengguna memilih salah satu porsi
-            val selectedId = rgJumlahPorsi.checkedRadioButtonId
-            if (selectedId == -1) {
+            if (selectedPorsi.isNullOrEmpty()) {
                 Toast.makeText(this, "Pilih jumlah porsi terlebih dahulu!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Tampilkan Toast berdasarkan pilihan porsi
-            val selectedPorsi = when (selectedId) {
-                R.id.rbSatu -> "Anda memilih Satu Porsi"
-                R.id.rbDua -> "Anda memilih Setengah Porsi"
-                R.id.rbTiga -> "Anda memilih Seperempat Porsi"
-                else -> ""
+            val updatedProgress = healthyProgress + 75
+            val intent = Intent(this, WonPage::class.java).apply {
+                putExtra("progress", updatedProgress)
+                putExtra("selected_healthy_items", selectedHealthyItems)
+                putExtra("selected_porsi", selectedPorsi)
+                putExtra("progress_unhealthy", unhealthyProgress)
+                putExtra("selected_unhealthy_items", selectedUnealthyItems)
             }
-            Toast.makeText(this, selectedPorsi, Toast.LENGTH_SHORT).show()
-
-            // Tambahkan 25 poin ke total progres
-            val updatedProgress = totalProgress + 25  // Menambahkan 25 poin
-
-            // Kirim hasil ke halaman berikutnya (WonPage)
-            val intent = Intent(this, WonPage::class.java)
-            intent.putExtra("progress", updatedProgress)
             startActivity(intent)
         }
+    }
+
+    private fun setupRecyclerView(porsiList: List<String>) {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        porsiAdapter = PorsiAdapter(porsiList) { selected ->
+            selectedPorsi = selected
+        }
+        recyclerView.adapter = porsiAdapter
     }
 }

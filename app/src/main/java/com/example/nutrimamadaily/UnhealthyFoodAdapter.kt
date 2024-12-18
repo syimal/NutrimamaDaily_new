@@ -6,37 +6,34 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 
-class UnhealthyFoodAdapter(
-    private val foodList: List<FoodItem>,
-    private val onItemChecked: (FoodItem, Boolean) -> Unit
-) : RecyclerView.Adapter<UnhealthyFoodAdapter.ViewHolder>() {
+class UnhealthyFoodAdapter(private val foodList: List<String>) : RecyclerView.Adapter<UnhealthyFoodAdapter.ViewHolder>() {
 
-    private val selectedItems = mutableSetOf<FoodItem>()
+    private val selectedItems = mutableSetOf<String>()
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val checkBox: CheckBox = view.findViewById(R.id.checkBoxFood)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val checkBox: CheckBox = itemView.findViewById(R.id.checkBoxItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_food_checkbox, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_item_unhealthy_food, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val foodItem = foodList[position]
-        holder.checkBox.text = foodItem.nama
-        holder.checkBox.isChecked = selectedItems.contains(foodItem)
+        val foodName = foodList[position]
+        holder.checkBox.text = foodName
+        holder.checkBox.isChecked = selectedItems.contains(foodName)
 
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                selectedItems.add(foodItem)
+                selectedItems.add(foodName)
             } else {
-                selectedItems.remove(foodItem)
+                selectedItems.remove(foodName)
             }
-            onItemChecked(foodItem, isChecked)
         }
     }
 
-    override fun getItemCount() = foodList.size
+    override fun getItemCount(): Int = foodList.size
+
+    fun getSelectedItems(): List<String> = selectedItems.toList()
 }

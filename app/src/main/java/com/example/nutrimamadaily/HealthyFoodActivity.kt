@@ -21,27 +21,22 @@ class HealthyFoodActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_healthy_food)
 
-        // Ambil nilai poin dari intent sebelumnya
         initialPoints = intent.getIntExtra("points", 0)
 
-        // Inisialisasi RecyclerView dan Firestore
         recyclerView = findViewById(R.id.recyclerViewHealthyFood)
         recyclerView.layoutManager = LinearLayoutManager(this)
         db = FirebaseFirestore.getInstance()
 
-        // List untuk menyimpan data nama makanan sehat
         val healthyFoodList = mutableListOf<String>()
 
-        // QUERY FIRESTORE: Ambil hanya makanan sehat
         db.collection("makanan")
-            .whereEqualTo("sehat", true) // Filter: sehat == true
+            .whereEqualTo("sehat", true)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val namaMakanan = document.getString("Nama") ?: "" // Ambil nama
-                    healthyFoodList.add(namaMakanan) // Tambahkan ke list
+                    val namaMakanan = document.getString("Nama") ?: ""
+                    healthyFoodList.add(namaMakanan)
                 }
-                // Set adapter setelah data berhasil diambil
                 adapter = HealthyFoodAdapter(healthyFoodList)
                 recyclerView.adapter = adapter
             }
@@ -50,13 +45,15 @@ class HealthyFoodActivity : AppCompatActivity() {
                 Toast.makeText(this, "Gagal mengambil data!", Toast.LENGTH_SHORT).show()
             }
 
-        // Tombol Submit untuk berpindah ke JumlahMakananActivity
         val btnSubmit = findViewById<Button>(R.id.btnSubmit)
         btnSubmit.setOnClickListener {
             val selectedItems = adapter.getSelectedItems()
-            val progress = initialPoints + 50
+            if (selectedItems.isEmpty()) {
+                Toast.makeText(this, "Pilih setidaknya satu makanan sehat!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Pindah ke JumlahMakananActivity
+            val progress = initialPoints + 50
             val intent = Intent(this, JumlahMakananActivity::class.java).apply {
                 putExtra("progress_healthy", progress)
                 putExtra("selected_healthy_items", selectedItems.joinToString("\n"))

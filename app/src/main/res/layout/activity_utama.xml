@@ -11,16 +11,17 @@
     android:background="@android:color/white">
 
     <!-- ImageButton -->
-    <ImageButton
+    <ImageView
         android:id="@+id/imagepage"
-        android:layout_width="382dp"
-        android:layout_height="348dp"
-        app:srcCompat="@drawable/ic_ibuhamil"
+        android:layout_width="500dp"
+        android:layout_height="370dp"
+        app:srcCompat="@drawable/mama_lope"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
-        android:scaleType="fitXY"
-        android:contentDescription="ibu_makan"/>
+        android:contentDescription="ibu_makan"
+        android:layout_gravity="center"/>
+
 
     <!-- TextView dalam LinearLayout -->
     <LinearLayout

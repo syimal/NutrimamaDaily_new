@@ -21,7 +21,7 @@ class UtamaActivity : AppCompatActivity() {
 
         // Listener untuk tombol "Makanan Tidak Sehat"
         btnUnHealthy.setOnClickListener {
-            startFoodActivity(UnhealthyFoodAdapter::class.java, 25)  // Kirim 25 poin untuk tidak sehat
+            startFoodActivity(UnhealthyFoodActivity::class.java, 25)  // Kirim 25 poin untuk tidak sehat
         }
     }
 

@@ -14,37 +14,56 @@ class WonPage : AppCompatActivity() {
     private lateinit var circularProgressBar: CircularProgressBar
     private var progress = 0
     private val handler = Handler(Looper.getMainLooper())
-    private var isNavigating = false // Untuk mencegah navigasi ganda
+    private var isNavigating = false
+    private var isProgressRunning = false // Flag untuk mencegah pemanggilan ulang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.won_page) // Pastikan layout sesuai
+        setContentView(R.layout.won_page)
 
-        // Ambil data progress dari Intent
-        val totalProgress = intent.getIntExtra("progress", 0).coerceAtMost(100) // Batas maksimum 100
+        val totalProgress = intent.getIntExtra("progress", 0).coerceAtMost(100)
+        val selectedItems = intent.getStringExtra("selected_healthy_items")
+        val selectedPorsi = intent.getStringExtra("selected_porsi")
+        val unhealthyProgress = intent.getIntExtra("progress_unhealthy", 0)
+        val selectedUnealthyItems = intent.getStringExtra("selected_unhealthy_items")
 
-        // Referensi elemen UI
         circularProgressBar = findViewById(R.id.circularProgressBar)
         val tvFinalProgress = findViewById<TextView>(R.id.tvFinalProgress)
         val btnStartPlan = findViewById<Button>(R.id.btnStartPlan)
 
-        // Set teks untuk progres yang diterima
         tvFinalProgress.text = "Progres Anda: $totalProgress%"
 
-        // Tombol navigasi
+        // Menambah 1% progres di Homepage hanya ketika progress sudah 100%
         btnStartPlan.setOnClickListener {
             if (!isNavigating) {
                 isNavigating = true
-                Toast.makeText(this, "Navigasi ke halaman berikutnya...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Navigasi ke halaman ringkasan...", Toast.LENGTH_SHORT).show()
 
-                // Navigasi ke SummaryActivity atau halaman lain
-                val intent = Intent(this, SummaryActivity::class.java) // Ubah sesuai activity tujuan
+                val intent = Intent(this, SummaryActivity::class.java).apply {
+                    putExtra("progress", totalProgress)
+                    putExtra("selected_healthy_items", selectedItems)
+                    putExtra("selected_porsi", selectedPorsi)
+                    putExtra("progress_unhealthy", unhealthyProgress)
+                    putExtra("selected_unhealthy_items", selectedUnealthyItems)
+                }
+
+                // Kirim intent untuk memperbarui progres di Homepage
+                if (totalProgress == 100) {
+                    intent.putExtra("update_progress", true)  // Tanda bahwa progres sudah 100% untuk diupdate
+                } else {
+                    intent.putExtra("update_progress", false)  // Tidak mengupdate progres jika tidak 100%
+                }
+
                 startActivity(intent)
+                finish() // Mengakhiri aktivitas ini setelah berpindah
             }
         }
 
-        // Simulasikan progress bar
-        simulateProgress(totalProgress)
+        // Jalankan progres bar hanya jika belum berjalan
+        if (!isProgressRunning) {
+            isProgressRunning = true
+            simulateProgress(totalProgress)
+        }
     }
 
     private fun simulateProgress(targetProgress: Int) {
@@ -53,7 +72,10 @@ class WonPage : AppCompatActivity() {
                 if (progress < targetProgress) {
                     progress++
                     circularProgressBar.setProgress(progress)
-                    handler.postDelayed(this, 50) // Update setiap 50ms
+                    handler.postDelayed(this, 50)
+                } else {
+                    // Jika sudah selesai, hentikan progress
+                    isProgressRunning = false
                 }
             }
         })

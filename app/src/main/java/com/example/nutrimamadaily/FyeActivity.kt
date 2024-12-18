@@ -3,6 +3,7 @@ package com.example.nutrimamadaily
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -20,10 +21,10 @@ class FyeActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataList: ArrayList<DataClass>
-    lateinit var imageList: Array<Int>
-    lateinit var titleList: Array<String>
-    lateinit var descList: Array<String>
-    lateinit var detailImage: Array<Int>
+    private lateinit var imageList: Array<Int>
+    private lateinit var titleList: Array<String>
+    private lateinit var descList: Array<String>
+    private lateinit var detailImage: Array<Int>
     private lateinit var myAdapter: AdapterClass
     private lateinit var searchView: SearchView
     private lateinit var searchList: ArrayList<DataClass>
@@ -126,7 +127,7 @@ class FyeActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
         val nutritionRef = database.child("nutrition")
 
-        nutritionRef.addValueEventListener(object : ValueEventListener {
+        nutritionRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 dataList.clear()
                 searchList.clear()
@@ -155,7 +156,7 @@ class FyeActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle error
-                // Optionally, you can use the local data as a fallback
+                Log.e("FyeActivity", "Database error: ${error.message}")
             }
         })
     }

@@ -1,8 +1,10 @@
 package com.example.nutrimamadaily
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,11 +26,15 @@ class DetailActivity : AppCompatActivity() {
         detailDesc = findViewById(R.id.detailDesc)
 
         // Ambil data dari intent
-        val dataClass = intent.getSerializableExtra("android") as? DataClass
+        val dataClass = intent.getParcelableExtra<DataClass>("android")
 
         // Jika data tidak null, gunakan titel untuk mengambil data dari Firebase
         dataClass?.let { item ->
             fetchDetailFromFirebase(item.dataTitle)
+        } ?: run {
+            // Handle scenario where no data was passed
+            Toast.makeText(this, "No data available", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
@@ -39,20 +45,33 @@ class DetailActivity : AppCompatActivity() {
         nutritionRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    val title = snapshot.child("title").getValue(String::class.java) ?: ""
-                    val description = snapshot.child("description").getValue(String::class.java) ?: ""
+                    val fetchedTitle = snapshot.child("title").getValue(String::class.java) ?: title
+                    val description = snapshot.child("description").getValue(String::class.java) ?: "Deskripsi tidak tersedia"
                     val detailImageResource = snapshot.child("detailImageResource").getValue(Int::class.java) ?: 0
 
                     // Set data ke view
-                    detailTitle.text = title
+                    detailTitle.text = fetchedTitle
                     detailDesc.text = description
-                    detailImage.setImageResource(detailImageResource)
+
+                    // Tambahkan pengecekan untuk gambar
+                    if (detailImageResource != 0) {
+                        detailImage.setImageResource(detailImageResource)
+                    } else {
+                        //
+                    }
+                } else {
+                    // Data tidak ditemukan
+                    Log.e("DetailActivity", "No data found for title: $title")
+                    Toast.makeText(this@DetailActivity, "Informasi tidak ditemukan", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle error
-                // Misalnya, tampilkan pesan error atau gunakan data default
+                // Handle error dengan lebih detail
+                Log.e("DetailActivity", "Database error: ${error.message}")
+                Toast.makeText(this@DetailActivity, "Gagal memuat data", Toast.LENGTH_SHORT).show()
+                finish()
             }
         })
     }
