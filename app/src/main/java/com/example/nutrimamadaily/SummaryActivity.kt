@@ -7,8 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.android.gms.tasks.Tasks
@@ -32,37 +30,21 @@ class SummaryActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         summaryTextView = findViewById(R.id.textView)
 
-        val selectedHealthyItems = intent.getStringExtra("selected_healthy_items")?.split("\n") ?: emptyList()
-        val selectedUnhealthyItems = intent.getStringExtra("selected_unhealthy_items")?.split("\n") ?: emptyList()
-        val selectedPorsi = intent.getStringExtra("selected_porsi")
-
-        Log.d("SummaryActivity", "Selected Healthy Items: $selectedHealthyItems")
-        Log.d("SummaryActivity", "Selected Unhealthy Items: $selectedUnhealthyItems")
-        Log.d("SummaryActivity", "Selected Porsi: $selectedPorsi")
-
-        val selectedHealthyItems2 = intent.getStringExtra("selected_healthy_items")
-            ?.split("\n")
-            ?.map { it.trim() } // Remove extra spaces
-            ?.filter { it.isNotEmpty() } // Exclude empty items
-            ?: emptyList()
-
-        val selectedUnhealthyItems2= intent.getStringExtra("selected_unhealthy_items")
-            ?.split("\n")
-            ?.map { it.trim() }
-            ?.filter { it.isNotEmpty() }
-            ?: emptyList()
-
+        val selectedHealthyItems =
+            intent.getStringExtra("selected_healthy_items")?.split("\n") ?: emptyList()
+        val selectedUnhealthyItems =
+            intent.getStringExtra("selected_unhealthy_items")?.split("\n") ?: emptyList()
 
         val allSelectedItems = selectedHealthyItems + selectedUnhealthyItems
 
         val foodType = when {
-            selectedHealthyItems2.isNotEmpty() && selectedUnhealthyItems2.isEmpty() -> "Healthy"
-            selectedUnhealthyItems2.isNotEmpty() && selectedHealthyItems2.isEmpty() -> "Unhealthy"
-            selectedHealthyItems2.isNotEmpty() && selectedUnhealthyItems2.isNotEmpty() -> "Mixed"
+            selectedHealthyItems.size > selectedUnhealthyItems.size -> "Healthy"
+            selectedUnhealthyItems.size > selectedHealthyItems.size -> "Unhealthy"
+            selectedUnhealthyItems.size == selectedHealthyItems.size -> "Mixed"
             else -> "None"
         }
 
-        updateSummary(allSelectedItems, selectedPorsi, foodType)
+        updateSummary(allSelectedItems, foodType)
 
         val buttonOke = findViewById<Button>(R.id.buttonoke)
         buttonOke.setOnClickListener {
@@ -72,46 +54,24 @@ class SummaryActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveSummaryToFirestore(summary: String, date: String, categoryMakanan: String) {
-        val summaryData = mapOf(
-            "summary" to summary,
-            "date" to date,
-            "category" to categoryMakanan
-        )
-
-        db.collection("riwayat")
-            .add(summaryData)
-            .addOnSuccessListener {
-                Log.d("SummaryActivity", "Summary saved to Firestore successfully!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("SummaryActivity", "Failed to save summary to Firestore: ", e)
-            }
-    }
-
-    private fun updateSummary(allSelectedItems: List<String>, selectedPorsi: String?, categoryMakanan:String) {
+    private fun updateSummary(allSelectedItems: List<String>, foodType: String) {
         val summaryBuilder = StringBuilder()
         summaryBuilder.append("Ringkasan Nutrisi Anda Hari Ini:\n\n")
 
-        if (allSelectedItems.isNotEmpty()) {
-            summaryBuilder.append("Makanan yang dipilih:\n")
-            allSelectedItems.forEach { item -> summaryBuilder.append("- $item\n") }
-        } else {
-            summaryBuilder.append("Tidak ada makanan yang dipilih.\n")
-            summaryTextView.text = summaryBuilder.toString()
-            return
-        }
+        // Tambahkan daftar makanan yang dipilih
+        summaryBuilder.append("Makanan yang Dipilih:\n")
+        allSelectedItems.forEach { item -> summaryBuilder.append(" $item\n") }
 
-        selectedPorsi?.let {
-            summaryBuilder.append("\nPorsi yang dipilih: $it\n")
-        } ?: run {
-            summaryBuilder.append("\nPorsi tidak dipilih.\n")
-        }
+        // Tambahkan kategori makanan
+        summaryBuilder.append("\nKategori Makanan: $foodType")
 
+        // Ambil tanggal saat ini
         val currentDate = SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.getDefault()).format(Date())
 
+        // Fetch nutrition data dan tambahkan ke summary
         fetchNutritionData(allSelectedItems, summaryBuilder) {
-            saveSummaryToFirestore(summaryBuilder.toString(), currentDate, categoryMakanan)
+            saveSummaryToFirestore(summaryBuilder.toString(), currentDate, foodType)
+            summaryTextView.text = summaryBuilder.toString()
         }
     }
 
@@ -120,9 +80,8 @@ class SummaryActivity : AppCompatActivity() {
         summaryBuilder: StringBuilder,
         onComplete: () -> Unit
     ) {
-        Log.d("SummaryActivity", "Fetching nutrition data for: $allSelectedItems")
         val chunkedItems = allSelectedItems.chunked(10)
-        var totalZatBesi = 0
+        var totalZatBesi = 0.0
         val nutritionDetails = mutableListOf<String>()
 
         val tasks = chunkedItems.map { chunk ->
@@ -136,13 +95,24 @@ class SummaryActivity : AppCompatActivity() {
                 results.forEach { result ->
                     result.forEach { document ->
                         val namaMakanan = document.getString("Nama") ?: "Tidak diketahui"
-                        val zatBesi = document.getLong("zatBesi")?.toInt() ?: 0
-                        Log.d("SummaryActivity", "Item: $namaMakanan, Zat Besi: $zatBesi")
+                        val zatBesi = (document.get("zatBesi") as? Number)?.toDouble() ?: 0.0
+
                         totalZatBesi += zatBesi
                         nutritionDetails.add("$namaMakanan - Zat Besi: $zatBesi mg")
                     }
                 }
 
+                // Simpan total zat besi ke SharedPreferences
+                val sharedPref = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+                val existingZatBesi = sharedPref.getFloat("TOTAL_ZAT_BESI", 0f)
+                val newTotalZatBesi = existingZatBesi + totalZatBesi.toFloat()
+
+                with(sharedPref.edit()) {
+                    putFloat("TOTAL_ZAT_BESI", newTotalZatBesi)
+                    apply()
+                }
+
+                // Tambahkan rincian zat besi ke summary
                 if (nutritionDetails.isNotEmpty()) {
                     summaryBuilder.append("\n\nRincian Zat Besi:\n")
                     nutritionDetails.forEach { detail -> summaryBuilder.append("$detail\n") }
@@ -151,7 +121,6 @@ class SummaryActivity : AppCompatActivity() {
                     summaryBuilder.append("\n\nTidak ada rincian zat besi yang ditemukan.")
                 }
 
-                summaryTextView.text = summaryBuilder.toString()
                 onComplete()
             }
             .addOnFailureListener { exception ->
@@ -159,5 +128,21 @@ class SummaryActivity : AppCompatActivity() {
                 Log.e("SummaryActivity", "Error fetching data: ${exception.localizedMessage}")
             }
     }
-}
 
+    private fun saveSummaryToFirestore(summary: String, date: String, foodType: String) {
+        val summaryData = mapOf(
+            "summary" to summary,
+            "date" to date,
+            "category" to foodType
+        )
+
+        db.collection("riwayat")
+            .add(summaryData)
+            .addOnSuccessListener {
+                Log.d("SummaryActivity", "Summary saved to Firestore successfully!")
+            }
+            .addOnFailureListener { e ->
+                Log.e("SummaryActivity", "Failed to save summary to Firestore: ", e)
+            }
+    }
+}

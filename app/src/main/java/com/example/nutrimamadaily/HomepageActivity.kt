@@ -1,152 +1,139 @@
 package com.example.nutrimamadaily
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import de.hdodenhof.circleimageview.CircleImageView
 
 class HomepageActivity : AppCompatActivity() {
 
+    // Deklarasi variabel tambahan
     private lateinit var progressBar: ProgressBar
     private lateinit var progressTextView: TextView
-    private lateinit var btnResetProgress: Button
-    private lateinit var db: FirebaseFirestore
+    private lateinit var headerCaptionTextView: TextView
 
-    private lateinit var sharedPreferences: SharedPreferences
+    // Total tahapan atau misi yang akan dilacak
+  // private val TOTAL_STAGES = 5
 
-    private val TOTAL_STAGES = 5
+    private val PROGRESS_LIMIT = 27.0f // Batas total zat besi sebelum reset
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
-        db = FirebaseFirestore.getInstance()
 
+        // Inisialisasi Progress Bar
         progressBar = findViewById(R.id.progress_bar)
         progressTextView = findViewById(R.id.progress_text)
-        btnResetProgress = findViewById(R.id.btn_reset_progress)
+        headerCaptionTextView = findViewById(R.id.header_image_caption)
 
-        sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-
-        setupProgressBar()
-        setupResetButton()
+        updateProgressUI()
 
         val carouselImages = listOf(
             R.drawable.ibu_susu,
             R.drawable.ananda,
             R.drawable.maxresdefault
         )
+
         val viewPager: ViewPager2 = findViewById(R.id.image_carousel)
         val indicators: LinearLayout = findViewById(R.id.indicator_views)
 
+        // Set Adapter
         viewPager.adapter = ImageCarouselAdapter(carouselImages)
+
+        // Setup indicators
         setupIndicators(indicators, carouselImages.size)
+
+        // Listen to page changes
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateIndicators(indicators, position)
             }
         })
 
-        setupButtons()
-
-        // Menangani intent untuk memperbarui progres
-        val updateProgress = intent.getBooleanExtra("update_progress", false)
-        if (updateProgress) {
-            val currentProgress = sharedPreferences.getInt("healthy_progress", 0)
-            val newProgress = currentProgress + 100 // Menambah 1%
-            saveProgress(newProgress)
-            updateProgress()
-        }
-    }
-
-    private fun setupProgressBar() {
-        progressBar.max = 100
-        val savedProgress = sharedPreferences.getInt("healthy_progress", 0)
-        updateProgress()
-    }
-
-    private fun setupResetButton() {
-        btnResetProgress.setOnClickListener {
-            resetProgress()
-        }
-    }
-
-    private fun resetProgress() {
-        val editor = sharedPreferences.edit()
-        editor.putInt("healthy_progress", 0)
-        editor.apply()
-
-        updateProgress()
-
-        Toast.makeText(this, "Progress telah direset ke 0%", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun saveProgress(progress: Int) {
-        val editor = sharedPreferences.edit()
-        editor.putInt("healthy_progress", progress)
-        editor.apply()
-    }
-
-    private fun updateProgress() {
-        countHealthyItems()
-    }
-
-    private fun countHealthyItems() {
-        db.collection("riwayat")
-            .whereEqualTo("category", "Healthy") // Filter by category
-            .get()
-            .addOnSuccessListener { querySnapshot: QuerySnapshot ->
-                val count = querySnapshot.size() // Number of documents that match
-                Log.d("Firestore", "Count of Healthy items: $count")
-
-                // Update progress bar and text view with the count
-                val progressPercentage = count
-                progressBar.progress = progressPercentage
-                progressTextView.text = "$progressPercentage%"
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore", "Error fetching data", exception)
-            }
-    }
-
-
-    private fun setupButtons() {
+        // Set the OnClickListener for the "For Your Education" button
         val btnFye: Button = findViewById(R.id.btn_fye)
-        val btnTips: Button = findViewById(R.id.btn_tips)
-        val btnRiwayat: Button = findViewById(R.id.btn_riwayat)
-        val diaryImage: ImageView = findViewById(R.id.utama)
-
         btnFye.setOnClickListener {
-            navigateToActivity(FyeActivity::class.java)
+            // Start FyeActivity when the button is clicked
+            val intent = Intent(this, FyeActivity::class.java)
+            startActivity(intent)
         }
+
+        // Set the OnClickListener for the "Tips" button
+        val btnTips: Button = findViewById(R.id.btn_tips)
         btnTips.setOnClickListener {
-            navigateToActivity(TipsActivity::class.java)
+            // Start TipsActivity when the button is clicked
+            val intent = Intent(this, TipsActivity::class.java)
+            startActivity(intent)
         }
+
+        // Set the OnClickListener for the "Riwayat" button
+        val btnRiwayat: Button = findViewById(R.id.btn_riwayat)
         btnRiwayat.setOnClickListener {
-            navigateToActivity(RiwayatActivity::class.java)
+            // Start RiwayatActivity when the button is clicked
+            val intent = Intent(this, RiwayatActivity::class.java)
+            startActivity(intent)
         }
+
+        // Set the OnClickListener for the Diary image
+        val diaryImage: ImageView = findViewById(R.id.utama)
         diaryImage.setOnClickListener {
-            navigateToActivity(UtamaActivity::class.java)
+            // When clicked, open UtamaActivity
+            val intent = Intent(this, FoodActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Tambahan untuk CircleImageView
+        val profileIcon: CircleImageView = findViewById(R.id.profile_icon)
+        profileIcon.setOnClickListener {
+            // Ketika di klik, buka halaman ProfileActivity
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    private fun navigateToActivity(activityClass: Class<*>) {
-        startActivity(Intent(this, activityClass))
+    private fun updateProgressUI() {
+        val sharedPref = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val currentProgress = sharedPref.getFloat("TOTAL_ZAT_BESI", 0f).toDouble()
+        val currentHeaderCaption = sharedPref.getInt("HEADER_CAPTION", 0)
+
+        if (currentProgress >= PROGRESS_LIMIT) {
+            val newHeaderCaption = currentHeaderCaption + 1
+            sharedPref.edit().apply {
+                putFloat("TOTAL_ZAT_BESI", 0f)
+                putInt("HEADER_CAPTION", newHeaderCaption)
+                apply()
+            }
+            progressBar.progress = 0
+            progressTextView.text = "0.0 mg / 27 mg "
+            headerCaptionTextView.text = "$newHeaderCaption"
+        } else {
+            // Perhitungan yang lebih eksplisit
+            val progressFloat = currentProgress.toFloat()
+            val limitFloat = PROGRESS_LIMIT.toFloat()
+            val percentage = (progressFloat / limitFloat * 100).toInt()
+            progressBar.progress = percentage
+            progressTextView.text = "%.1f mg / 27 mg".format(currentProgress)
+            headerCaptionTextView.text = "$currentHeaderCaption"
+        }
     }
 
     private fun setupIndicators(indicators: LinearLayout, count: Int) {
         indicators.removeAllViews()
         for (i in 0 until count) {
             val indicator = View(this).apply {
-                layoutParams = LinearLayout.LayoutParams(16, 16).apply { marginEnd = 8 }
+                layoutParams = LinearLayout.LayoutParams(16, 16).apply {
+                    marginEnd = 8
+                }
                 setBackgroundResource(if (i == 0) R.drawable.square_red else R.drawable.square_grey)
             }
             indicators.addView(indicator)
@@ -161,6 +148,7 @@ class HomepageActivity : AppCompatActivity() {
         }
     }
 
+    // Inner class Adapter untuk Carousel
     inner class ImageCarouselAdapter(private val images: List<Int>) :
         RecyclerView.Adapter<ImageCarouselAdapter.ViewHolder>() {
 

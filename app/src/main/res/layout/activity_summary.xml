@@ -6,7 +6,6 @@
     android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TextView dengan Ringkasan Nutrisi -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="322dp"
@@ -16,7 +15,7 @@
         android:elevation="20dp"
         android:gravity="center_horizontal"
         android:padding="10dp"
-        android:text="Ringkasan Nutrisi anda hari ini"
+        android:text="Ringkasan Nutrisi anda:"
         android:textColor="#FF122E"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -25,7 +24,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Button Oke -->
     <Button
         android:id="@+id/buttonoke"
         android:layout_width="134dp"

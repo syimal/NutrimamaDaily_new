@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header Section with Profile -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +25,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/default_profile"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -40,7 +39,7 @@
                     android:text="Hi, Moms!"
                     android:textColor="#FF122E"
                     android:textSize="24sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/user_subtitle"
@@ -48,8 +47,36 @@
                     android:layout_height="wrap_content"
                     android:text="Semangat hari ini!"
                     android:textColor="#FF122E"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/header_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/apiapi"
+                    android:contentDescription="Image" />
+
+                <TextView
+                    android:id="@+id/header_image_caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:paddingLeft="5dp"
+                    android:text="0"
+                    android:textColor="#FF122E"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- Progress Section -->
@@ -89,18 +116,10 @@
                     android:id="@+id/progress_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0% Selesai"
                     android:layout_gravity="center_horizontal"
                     android:textColor="#FF122E"
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"/>
-                <Button
-                    android:id="@+id/btn_reset_progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reset Progress"
-                    android:layout_marginTop="16dp"
-                    android:layout_gravity="center" />
 
 
             </LinearLayout>
